@@ -7,11 +7,24 @@ output:
 
 
 ## Loading and preprocessing the data
+In this part the raw data are imported to the R code. The data is in a .csv format in the acivity.csv file.
 
-
+```{R}
+raw_data <- read.csv(file='./activity/activity.csv')
+head(raw_data)
+mean(raw_data[,1], na.rm=TRUE)
+```
 
 ## What is mean total number of steps taken per day?
+No we need to calculate the number of steps taken at each day. The tapply command is used to perfom this part.
+```{R}
+#lapply()
+ta_mean <- tapply(raw_data[,1], raw_data[,2], mean, na.rm=TRUE)
+head(ta_mean)
+summary(ta_mean)
+hist(ta_mean)
 
+```
 
 
 ## What is the average daily activity pattern?
