@@ -8,15 +8,52 @@ output:
 
 ## Loading and preprocessing the data
 
+In this part the raw data are imported to the R code. The data is in a .csv format in the acivity.csv file.
 
+```{R}
+raw_data <- read.csv(file='./activity/activity.csv')
+head(raw_data)
+mean(raw_data[,1], na.rm=TRUE)
+summary(raw_data)
+```
 
 ## What is mean total number of steps taken per day?
+No we need to calculate the number of steps taken at each day.
 
+```{R}
+#lapply()
+mean_by_day <- tapply(raw_data[,1], raw_data[,2], mean, na.rm=TRUE)
+median_by_day <- tapply(raw_data[,1], raw_data[,2], median, na.rm=TRUE)
+head(mean_by_day)
+summary(mean_by_day)
+hist(mean_by_day)
+
+my_date <- unique(as.Date(raw_data[,2], fomrat = "%Y-%m-%d"))
+dur_days <- max(my_date) - min(my_date)
+dur_days
+plot(my_date, mean_by_day, 'h')
+plot(my_date, median_by_day, 'h')
+
+```
+The mean steps taken per day is : **`r mean_by_day`** steps
+The median steps taken per day is : **`r median_by_day`** steps
 
 
 ## What is the average daily activity pattern?
 
+```{R}
+mean_by_step <- tapply(raw_data[,1], raw_data[,3], mean, na.rm=TRUE)
 
+plot(unique(raw_data[,3]), mean_by_step, type = 'l')
+step_max <- max(mean_by_step)
+step_max_indx <- which.max(mean_by_step)
+inter_max <- raw_data[step_max_indx,3]
+max_hour <- floor(inter_max/60)
+max_min <- inter_max %% 60
+# step_max
+```
+
+As it can be seen from the figure above, on average the maxmim steps of  **`r round(step_max, digits = 2)`** steps is taken at **`r inter_max`** minute in a 5-minute interval which corresponds to the time **`r max_hour`:`r max_min`**. It shows that the peak activity happens at this time of the day.
 
 ## Imputing missing values
 
